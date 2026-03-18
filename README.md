@@ -73,7 +73,7 @@ subfinder → httpx → nuclei → validación manual
 ### 1. Enumeración de subdominios
 
 ```bash
-amass enum -d target.com -o subdomains.txt
+subfinder -d target.com > subdomains.txt
 ```
 
 ### 2. Filtrado de hosts activos
