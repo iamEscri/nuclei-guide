@@ -115,5 +115,5 @@ Distribuido bajo la licencia [MIT](LICENSE).
 ---
 
 <p align="center">
-  Hecho con por <a href="https://github.com/iamEscri">iamEscri</a>
+  Hecho por <a href="https://github.com/iamEscri">iamEscri</a>
 </p>
