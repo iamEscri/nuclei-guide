@@ -1,10 +1,33 @@
-# 🔬 nuclei-guide
+# 🔍 Nuclei Guide
 
-> Repositorio técnico sobre el uso de **Nuclei** en análisis de vulnerabilidades — workflows profesionales, cheatsheets, laboratorios prácticos y scripts de automatización.
+> Recurso técnico profesional para el uso de **Nuclei** en flujos reales de análisis de vulnerabilidades. Orientado a analistas de ciberseguridad que buscan automatizar y escalar su proceso de reconocimiento.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Nuclei](https://img.shields.io/badge/tool-Nuclei-blueviolet)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
+
+---
+
+## 📌 ¿Qué encontrarás aquí?
+
+Este repositorio no es un simple listado de comandos. Está diseñado para que entiendas:
+
+- **Cuándo** usar Nuclei dentro de un workflow real
+- **Cómo** integrarlo con otras herramientas (amass, httpx)
+- **Qué resultados** esperar y cómo validarlos
+- **Cuáles son sus limitaciones** reales en entornos profesionales
+
+---
+
+## 🧠 ¿Qué es Nuclei?
+
+**Nuclei** es un scanner de vulnerabilidades basado en templates que permite realizar detecciones rápidas y automatizadas sobre aplicaciones web, APIs e infraestructura expuesta.
+
+Su principal ventaja es la **velocidad y escalabilidad**, siendo especialmente útil en fases de reconocimiento masivo.
+
+```
+Template → Target → Detección automatizada → Output estructurado
+```
 
 ---
 
@@ -14,7 +37,7 @@
 nuclei-guide/
 ├── docs/           # Documentación técnica, guías y cheatsheets
 ├── images/         # Recursos visuales y capturas de pantalla
-├── labs/           # Laboratorios prácticos
+├── labs/           # Laboratorios prácticos con entornos controlados
 ├── scripts/        # Scripts de automatización de pipelines
 ├── LICENSE
 └── README.md
@@ -22,98 +45,139 @@ nuclei-guide/
 
 ---
 
-## 📚 Contenido
+## ⚙️ Metodología de uso
 
-### `docs/`
-Documentación técnica sobre el uso de Nuclei, organizada por módulos:
-- Instalación y configuración
-- Uso de templates oficiales y personalizados
-- Cheatsheets de flags y opciones
-- Workflows profesionales para bug bounty y pentesting
+Nuclei debe integrarse dentro de un flujo estructurado, no ejecutarse de forma aislada:
 
-### `labs/`
-Entorno y escenario práctico para aprender a usar Nuclei en situaciones reales:
-- Detección de vulnerabilidades conocidas
-- Pruebas con targets de práctica
-- Ejercicios guiados paso a paso
+```
+Subdomain Enumeration → Live Hosts → Vulnerability Scanning → Validación manual
+```
 
-### `scripts/`
-Script de automatización listo para usar en pipeline de reconocimiento y escaneo.
-
-### `images/`
-Recursos visuales de apoyo para la documentación.
-
----
-
-## ⚡ Pipeline de automatización
-
-El script principal (`scripts/`) automatiza el flujo completo de reconocimiento + escaneo de vulnerabilidades:
+### Pipeline aplicado en este repositorio
 
 ```bash
-#!/bin/bash
-# Uso: ./pipeline.sh <dominio>
-
-TARGET=$1
-
-subfinder -d $TARGET > subdomains.txt    # Enumeración de subdominios
-httpx -l subdomains.txt > alive.txt      # Filtrado de hosts activos
-nuclei -l alive.txt -severity medium,high,critical -stats  # Escaneo de vulnerabilidades
+amass → httpx → nuclei → validación manual
 ```
 
-**Flujo:**
-```
-Dominio objetivo
-      │
-      ▼
-subfinder  ──►  subdomains.txt
-      │
-      ▼
-httpx      ──►  alive.txt
-      │
-      ▼
-nuclei     ──►  Resultados (medium / high / critical)
-```
-
-### Requisitos
-
-| Herramienta | Instalación |
-|-------------|-------------|
-| [Nuclei](https://github.com/projectdiscovery/nuclei) | `go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest` |
-| [subfinder](https://github.com/projectdiscovery/subfinder) | `go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest` |
-| [httpx](https://github.com/projectdiscovery/httpx) | `go install github.com/projectdiscovery/httpx/cmd/httpx@latest` |
+| Fase | Herramienta | Propósito |
+|------|-------------|-----------|
+| Enumeración | `amass` | Descubrir subdominios |
+| Filtrado | `httpx` | Identificar hosts activos |
+| Escaneo | `nuclei` | Detectar vulnerabilidades conocidas |
+| Validación | Manual | Confirmar impacto real |
 
 ---
 
-## 🚀 Inicio rápido
+## 🚀 Uso práctico
+
+### 1. Enumeración de subdominios
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/iamEscri/nuclei-guide.git
-cd nuclei-guide
-
-# Dar permisos al script
-chmod +x scripts/pipeline.sh
-
-# Ejecutar el pipeline completo
-./scripts/pipeline.sh ejemplo.com
+amass enum -d target.com -o subdomains.txt
 ```
 
+### 2. Filtrado de hosts activos
+
+```bash
+httpx -l subdomains.txt -o alive.txt
+```
+
+### 3. Escaneo con Nuclei
+
+```bash
+nuclei -l alive.txt -t templates/ -o results.txt
+```
+
+> 📂 Los scripts de automatización del pipeline completo están disponibles en [`/scripts`](./scripts/).
+
 ---
 
-## ⚠️ Aviso legal
+## 🧪 Laboratorio práctico
 
-Este repositorio tiene fines **exclusivamente educativos**. Toda la información aquí contenida está orientada a profesionales de la ciberseguridad y estudiantes que operan en entornos autorizados.
+El directorio [`/labs`](./labs/) incluye un entorno de laboratorio basado en Docker para practicar en un escenario controlado.
 
-> El uso de estas herramientas o técnicas sobre sistemas sin autorización expresa es **ilegal**. El autor no se hace responsable del uso indebido de este contenido.
+### Objetivo
+Detectar vulnerabilidades reales sobre una aplicación vulnerable desplegada localmente.
+
+### Proceso
+1. Despliegue de la aplicación vulnerable
+2. Ejecución del pipeline completo
+3. Uso de templates específicos
+4. Análisis y validación de resultados
+
+### Conclusión
+Nuclei permite detectar exposiciones de forma rápida, pero **siempre requiere validación manual** para confirmar el impacto real.
 
 ---
 
-## 📄 Licencia
+## ⚠️ Limitaciones
 
-Distribuido bajo la licencia [MIT](LICENSE).
+Nuclei es potente, pero tiene limitaciones importantes que todo analista debe conocer:
+
+- **Dependencia de templates**: solo detecta lo que sus templates cubren
+- **Falsos positivos**: los resultados deben verificarse manualmente
+- **Sin análisis lógico**: no detecta vulnerabilidades de lógica de negocio
+- **No sustituye auditorías manuales**: es un acelerador, no una solución final
+
+### ✅ Úsalo para
+- Reconocimiento masivo y automatizado
+- Detección rápida de exposiciones conocidas
+- Integración en pipelines de CI/CD
+- Fases iniciales de análisis
+
+### ❌ No lo uses como única herramienta en
+- Auditorías profundas
+- Análisis de lógica de negocio
+- Validación final de vulnerabilidades críticas
 
 ---
 
-<p align="center">
-  Hecho por <a href="https://github.com/iamEscri">iamEscri</a>
-</p>
+## 🔄 Falsos positivos y validación
+
+Todo output de Nuclei debe pasar por un proceso de validación:
+
+1. **Verificar manualmente** la vulnerabilidad detectada
+2. **Confirmar el impacto real** en el contexto del target
+3. **No confiar ciegamente** en el output automatizado
+
+> 👉 Nuclei **detecta**, pero no **valida completamente**.
+
+---
+
+## 🔍 Comparativa con otras herramientas
+
+| Herramienta | Uso principal | Ventajas | Limitaciones |
+|-------------|--------------|----------|--------------|
+| **Nuclei** | Recon masivo | Rápido, automatizable, gratuito | Dependencia de templates |
+| **Nessus** | Auditoría completa | Alta precisión | Más lento, licencia de pago |
+| **OpenVAS** | Open source | Flexible, sin coste | Complejo de configurar |
+
+---
+
+## 📚 Documentación adicional
+
+La carpeta [`/docs`](./docs/) contiene:
+
+- Guías técnicas detalladas
+- Cheatsheets de uso rápido
+- Recursos de referencia para analistas
+
+---
+
+## 🎯 Conclusión
+
+Nuclei es una herramienta clave en fases de **reconocimiento y detección masiva** dentro de un análisis de vulnerabilidades. Su valor reside en la automatización, escalabilidad y rapidez.
+
+Sin embargo, su uso debe complementarse siempre con:
+- Validación manual de resultados
+- Otras herramientas de análisis
+- Criterio técnico del analista
+
+> 👉 Utilizado correctamente, Nuclei permite **reducir significativamente la superficie de ataque** en fases iniciales de un engagement.
+
+---
+
+## 👤 Autor
+
+Proyecto desarrollado como parte de formación en análisis de vulnerabilidades y seguridad ofensiva.  
+Diseñado como recurso técnico reutilizable y material de portfolio profesional.
