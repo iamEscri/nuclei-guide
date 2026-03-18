@@ -56,12 +56,12 @@ Enumeración de subdominios → Hosts activos → Escaneo de vulnerabilidades �
 ### Pipeline aplicado en este repositorio
 
 ```bash
-amass → httpx → nuclei → validación manual
+subfinder → httpx → nuclei → validación manual
 ```
 
 | Fase | Herramienta | Propósito |
 |------|-------------|-----------|
-| Enumeración | `amass` | Descubrir subdominios |
+| Enumeración | `subfinder` | Descubrir subdominios |
 | Filtrado | `httpx` | Identificar hosts activos |
 | Escaneo | `nuclei` | Detectar vulnerabilidades conocidas |
 | Validación | Manual | Confirmar impacto real |
