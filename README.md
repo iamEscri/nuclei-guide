@@ -32,7 +32,7 @@ Documentación técnica sobre el uso de Nuclei, organizada por módulos:
 - Workflows profesionales para bug bounty y pentesting
 
 ### `labs/`
-Entorno y escenario práctics para aprender a usar Nuclei en situaciones reales:
+Entorno y escenario práctico para aprender a usar Nuclei en situaciones reales:
 - Detección de vulnerabilidades conocidas
 - Pruebas con targets de práctica
 - Ejercicios guiados paso a paso
