@@ -50,7 +50,7 @@ nuclei-guide/
 Nuclei debe integrarse dentro de un flujo estructurado, no ejecutarse de forma aislada:
 
 ```
-Subdomain Enumeration → Live Hosts → Vulnerability Scanning → Validación manual
+Enumeración de subdominios → Hosts activos → Escaneo de vulnerabilidades → Validación manual
 ```
 
 ### Pipeline aplicado en este repositorio
