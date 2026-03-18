@@ -100,6 +100,20 @@ nuclei -l targets.txt -stats
 
 Este comando ejecuta el escaneo utilizando todos los templates disponibles.
 
+![imagen 20](../images/20.png)
 
+
+También es posible filtrar vulnerabilidades por severidad y guardar los resultados con el comando:
+
+También es posible filtrar vulnerabilidades por severidad:
+
+```
+nuclei -u http://localhost:3000 -severity medium,high,critical -o resultados.txt
+```
+
+
+![imagen 19](../images/19.png)
+
+Esto permite analizar posteriormente los hallazgos detectados.
 
 
